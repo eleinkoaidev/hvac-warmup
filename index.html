@@ -137,6 +137,42 @@
                 </button>
             </div>
 
+            <!-- Sticky Results Bar -->
+            <div
+                class="sticky top-0 z-30 bg-attic-dark/95 backdrop-blur-md -mx-4 px-4 py-6 border-b border-attic-neonBlue/20 shadow-2xl mb-8">
+                <div class="max-w-4xl mx-auto grid grid-cols-2 gap-4">
+                    <div class="text-center">
+                        <div class="text-[10px] uppercase text-gray-500 font-bold tracking-widest mb-1">Actual Superheat
+                        </div>
+                        <div id="val-actual-sh" class="text-6xl font-black text-white leading-none">--</div>
+                        <div id="sh-delta" class="text-sm font-mono mt-2 hidden">--</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-[10px] uppercase text-gray-500 font-bold tracking-widest mb-1">Actual Subcool
+                        </div>
+                        <div id="val-actual-sc" class="text-6xl font-black text-white leading-none">--</div>
+                        <div id="sc-delta" class="text-sm font-mono mt-2 hidden">--</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Line Measurements Inputs -->
+            <div class="bg-attic-panel p-6 rounded-2xl border border-gray-700 shadow-xl mb-6">
+                <h3 class="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">Line Measurements</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] uppercase text-gray-400 mb-1">Suction Line (°F)</label>
+                        <input type="number" id="input-slt" placeholder="55" value="55"
+                            class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] uppercase text-gray-400 mb-1">Liquid Line (°F)</label>
+                        <input type="number" id="input-llt" placeholder="90" value="90"
+                            class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors">
+                    </div>
+                </div>
+            </div>
+
             <div class="bg-attic-panel rounded-2xl border border-gray-700 p-8 shadow-2xl relative overflow-hidden">
                 <!-- Background Glow -->
                 <div class="absolute -top-24 -right-24 w-64 h-64 bg-attic-neonYellow/5 rounded-full blur-3xl"></div>
@@ -197,7 +233,8 @@
                     <div
                         class="bg-attic-panel p-6 rounded-2xl border border-gray-700 shadow-xl relative overflow-hidden">
                         <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Target Superheat</h3>
+                            <h3 class="text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-widest">Target
+                                Superheat <span class="block md:inline opacity-70">(Suction Side)</span></h3>
                             <div id="target-sh-display"
                                 class="text-4xl font-black text-attic-neonYellow drop-shadow-[0_0_8px_rgba(255,230,0,0.3)]">
                                 --</div>
@@ -219,7 +256,8 @@
                     <!-- Target Subcool Input -->
                     <div class="bg-attic-panel p-6 rounded-2xl border border-gray-700 shadow-xl">
                         <div class="flex justify-between items-start mb-4">
-                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Target Subcool</h3>
+                            <h3 class="text-[10px] md:text-sm font-bold text-gray-500 uppercase tracking-widest">Target
+                                Subcool <span class="block md:inline opacity-70">(Liquid Side)</span></h3>
                             <div id="target-sc-display"
                                 class="text-4xl font-black text-attic-neonBlue drop-shadow-[0_0_8px_rgba(0,243,255,0.3)]">
                                 --</div>
@@ -233,38 +271,6 @@
                     </div>
                 </div>
 
-                <!-- Actuals Measurement Section -->
-                <div class="bg-attic-darker/50 p-6 rounded-2xl border border-attic-neonBlue/20 shadow-inner">
-                    <h3 class="text-center text-xs font-bold text-attic-neonBlue uppercase tracking-[0.2em] mb-6">Actual
-                        Measurements vs Targets</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <!-- Superheat Actual -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs uppercase text-gray-400 font-bold">Suction Line Temp</label>
-                                <div id="actual-sh-result" class="text-xl font-bold text-white">Actual SH: <span
-                                        id="val-actual-sh" class="text-attic-neonYellow">--</span></div>
-                            </div>
-                            <input type="number" id="input-slt" placeholder="55" value="55"
-                                class="w-full bg-attic-panel border border-gray-700 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors shadow-lg">
-                            <div id="sh-delta" class="text-center text-xs font-mono py-1 rounded bg-black/30 hidden">--
-                            </div>
-                        </div>
-
-                        <!-- Subcool Actual -->
-                        <div class="space-y-4">
-                            <div class="flex items-center justify-between">
-                                <label class="text-xs uppercase text-gray-400 font-bold">Liquid Line Temp</label>
-                                <div id="actual-sc-result" class="text-xl font-bold text-white">Actual SC: <span
-                                        id="val-actual-sc" class="text-attic-neonBlue">--</span></div>
-                            </div>
-                            <input type="number" id="input-llt" placeholder="90" value="90"
-                                class="w-full bg-attic-panel border border-gray-700 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors shadow-lg">
-                            <div id="sc-delta" class="text-center text-xs font-mono py-1 rounded bg-black/30 hidden">--
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -481,12 +487,26 @@
                 if (targetSHValue !== null) {
                     const diff = (parseFloat(actualSH) - targetSHValue).toFixed(1);
                     const sign = diff >= 0 ? "+" : "";
+                    const absDiff = Math.abs(diff);
                     shDelta.innerText = `Diff: ${sign}${diff}°`;
                     shDelta.classList.remove('hidden');
-                    shDelta.style.color = Math.abs(diff) < 2 ? '#ffe600' : '#ff4d4d';
+
+                    if (absDiff <= 3) {
+                        valActualSH.style.color = '#22c55e'; // Green (Perfect)
+                        shDelta.style.color = '#22c55e';
+                    } else if (absDiff <= 5) {
+                        valActualSH.style.color = '#eab308'; // Yellow (Acceptable)
+                        shDelta.style.color = '#eab308';
+                    } else {
+                        valActualSH.style.color = '#ef4444'; // Red (Out of Spec)
+                        shDelta.style.color = '#ef4444';
+                    }
+                } else {
+                    valActualSH.style.color = 'white';
                 }
             } else {
                 valActualSH.innerText = "--";
+                valActualSH.style.color = 'white';
                 shDelta.classList.add('hidden');
             }
 
@@ -499,12 +519,26 @@
                 if (!isNaN(targetSCValue)) {
                     const diff = (parseFloat(actualSC) - targetSCValue).toFixed(1);
                     const sign = diff >= 0 ? "+" : "";
+                    const absDiff = Math.abs(diff);
                     scDelta.innerText = `Diff: ${sign}${diff}°`;
                     scDelta.classList.remove('hidden');
-                    scDelta.style.color = Math.abs(diff) < 2 ? '#00f3ff' : '#ff4d4d';
+
+                    if (absDiff <= 3) {
+                        valActualSC.style.color = '#22c55e'; // Green
+                        scDelta.style.color = '#22c55e';
+                    } else if (absDiff <= 5) {
+                        valActualSC.style.color = '#eab308'; // Yellow
+                        scDelta.style.color = '#eab308';
+                    } else {
+                        valActualSC.style.color = '#ef4444'; // Red
+                        scDelta.style.color = '#ef4444';
+                    }
+                } else {
+                    valActualSC.style.color = 'white';
                 }
             } else {
                 valActualSC.innerText = "--";
+                valActualSC.style.color = 'white';
                 scDelta.classList.add('hidden');
             }
         }
