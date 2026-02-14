@@ -52,6 +52,28 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #00f3ff;
         }
+
+        /* Dynamic Accent Classes */
+        :root {
+            --attic-accent: #e76f8e;
+            /* Default R-410A Rose */
+        }
+
+        .bg-attic-accent {
+            background-color: var(--attic-accent) !important;
+        }
+
+        .border-attic-accent {
+            border-color: var(--attic-accent) !important;
+        }
+
+        .text-attic-accent {
+            color: var(--attic-accent) !important;
+        }
+
+        .shadow-accent {
+            box-shadow: 0 0 20px rgba(var(--accent-rgb), 0.4);
+        }
     </style>
 </head>
 
@@ -167,13 +189,13 @@
                 class="sticky top-0 z-30 bg-attic-dark/95 backdrop-blur-md -mx-4 px-4 py-6 border-b border-attic-neonBlue/20 shadow-2xl mb-8">
                 <div class="max-w-4xl mx-auto grid grid-cols-2 gap-4">
                     <div class="text-center">
-                        <div class="text-[10px] uppercase text-gray-500 font-bold tracking-widest mb-1">Actual Superheat
+                        <div class="text-sm uppercase text-white font-black tracking-widest mb-1">Actual Superheat
                         </div>
                         <div id="val-actual-sh" class="text-6xl font-black text-white leading-none">--</div>
                         <div id="sh-delta" class="text-sm font-mono mt-2 hidden">--</div>
                     </div>
                     <div class="text-center">
-                        <div class="text-[10px] uppercase text-gray-500 font-bold tracking-widest mb-1">Actual Subcool
+                        <div class="text-sm uppercase text-white font-black tracking-widest mb-1">Actual Subcool
                         </div>
                         <div id="val-actual-sc" class="text-6xl font-black text-white leading-none">--</div>
                         <div id="sc-delta" class="text-sm font-mono mt-2 hidden">--</div>
@@ -265,15 +287,44 @@
                                 --</div>
                         </div>
                         <div class="space-y-4">
+                            <!-- Outdoor Dry Bulb Input (Moved Up) -->
+                            <div>
+                                <label class="block text-xs uppercase text-gray-400 mb-1">Outdoor Dry Bulb (°F)</label>
+                                <input type="number" id="input-odb" placeholder="95" value="95"
+                                    class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
+                            </div>
+
+                            <!-- Indoor Wet Bulb Input -->
                             <div>
                                 <label class="block text-xs uppercase text-gray-400 mb-1">Indoor Wet Bulb (°F)</label>
                                 <input type="number" id="input-iwb" placeholder="67" value="67"
                                     class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
                             </div>
-                            <div>
-                                <label class="block text-xs uppercase text-gray-400 mb-1">Outdoor Dry Bulb (°F)</label>
-                                <input type="number" id="input-odb" placeholder="95" value="95"
-                                    class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
+
+                            <!-- Quick Set Baselines Indicator -->
+                            <div class="pt-2">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="h-px flex-grow bg-gray-700/50"></div>
+                                    <span
+                                        class="text-sm uppercase font-black text-gray-300 tracking-tighter whitespace-nowrap">Baseline
+                                        Defaults</span>
+                                    <div class="h-px flex-grow bg-gray-700/50"></div>
+                                </div>
+                                <p
+                                    class="text-xs md:text-sm text-gray-300 mb-4 text-center italic tracking-tight font-medium">
+                                    Tap a baseline for quick lookup, or enter measured values above manually.</p>
+
+                                <div class="grid grid-cols-3 gap-3">
+                                    <button
+                                        class="iwb-quick-set py-5 rounded-xl bg-gray-800 border-2 border-gray-700 text-lg font-black text-white hover:bg-gray-700 transition-all shadow-lg"
+                                        data-value="62">DRY (62°)</button>
+                                    <button
+                                        class="iwb-quick-set py-5 rounded-xl bg-attic-accent border-4 border-white text-lg font-black text-black hover:opacity-90 transition-all shadow-lg shadow-white/20"
+                                        data-value="67">STD (67°)</button>
+                                    <button
+                                        class="iwb-quick-set py-5 rounded-xl bg-gray-800 border-2 border-gray-700 text-lg font-black text-white hover:bg-gray-700 transition-all shadow-lg"
+                                        data-value="72">HUMID (72°)</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -711,6 +762,39 @@
         // Input Listeners
         [inputIWB, inputODB, inputTargetSC, inputSLT, inputLLT].forEach(input => {
             input.addEventListener('input', updateCalculations);
+        });
+
+        // IWB Quick Sets
+        const iwbButtons = document.querySelectorAll('.iwb-quick-set');
+        iwbButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-value');
+                inputIWB.value = val;
+
+                // Active Styling
+                iwbButtons.forEach(b => {
+                    b.classList.remove('bg-attic-accent', 'border-4', 'border-white', 'text-black', 'shadow-white/20');
+                    b.classList.add('bg-gray-800', 'border-2', 'border-gray-700', 'text-white');
+                });
+                btn.classList.remove('bg-gray-800', 'border-2', 'border-gray-700', 'text-white');
+                btn.classList.add('bg-attic-accent', 'border-4', 'border-white', 'text-black', 'shadow-white/20');
+
+                updateCalculations();
+            });
+        });
+
+        // Clear active buttons on manual input
+        inputIWB.addEventListener('input', () => {
+            const currentVal = inputIWB.value;
+            iwbButtons.forEach(btn => {
+                if (btn.getAttribute('data-value') !== currentVal) {
+                    btn.classList.remove('bg-attic-accent', 'border-4', 'border-white', 'text-black', 'shadow-white/20');
+                    btn.classList.add('bg-gray-800', 'border-2', 'border-gray-700', 'text-white');
+                } else {
+                    btn.classList.remove('bg-gray-800', 'border-2', 'border-gray-700', 'text-white');
+                    btn.classList.add('bg-attic-accent', 'border-4', 'border-white', 'text-black', 'shadow-white/20');
+                }
+            });
         });
 
         // Initialize
