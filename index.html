@@ -190,14 +190,80 @@
                 </div>
             </div>
 
-            <div class="mt-6 grid grid-cols-2 gap-4">
-                <div class="bg-attic-panel/50 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
-                    <span class="text-gray-500 text-sm">Target Superheat</span>
-                    <span class="text-attic-neonBlue font-bold">12°F</span>
+            <div class="mt-6 space-y-6">
+                <!-- Target Superheat & Subcool Row -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Target Superheat Calculator -->
+                    <div
+                        class="bg-attic-panel p-6 rounded-2xl border border-gray-700 shadow-xl relative overflow-hidden">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Target Superheat</h3>
+                            <div id="target-sh-display"
+                                class="text-4xl font-black text-attic-neonYellow drop-shadow-[0_0_8px_rgba(255,230,0,0.3)]">
+                                --</div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase text-gray-400 mb-1">Indoor Wet Bulb (°F)</label>
+                                <input type="number" id="input-iwb" placeholder="67" value="67"
+                                    class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase text-gray-400 mb-1">Outdoor Dry Bulb (°F)</label>
+                                <input type="number" id="input-odb" placeholder="95" value="95"
+                                    class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Target Subcool Input -->
+                    <div class="bg-attic-panel p-6 rounded-2xl border border-gray-700 shadow-xl">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 class="text-sm font-bold text-gray-500 uppercase tracking-widest">Target Subcool</h3>
+                            <div id="target-sc-display"
+                                class="text-4xl font-black text-attic-neonBlue drop-shadow-[0_0_8px_rgba(0,243,255,0.3)]">
+                                --</div>
+                        </div>
+                        <div class="space-y-4">
+                            <label class="block text-xs uppercase text-gray-400 mb-1">Manufacturer Spec (°F)</label>
+                            <input type="number" id="input-target-sc" placeholder="10" value="10"
+                                class="w-full bg-attic-darker border border-gray-600 rounded-lg p-3 text-white focus:border-attic-neonBlue focus:outline-none transition-colors">
+                            <p class="text-[10px] text-gray-500 italic">Common range: 8°F to 12°F</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="bg-attic-panel/50 p-4 rounded-xl border border-gray-800 flex justify-between items-center">
-                    <span class="text-gray-500 text-sm">Target Subcool</span>
-                    <span class="text-attic-neonBlue font-bold">10°F</span>
+
+                <!-- Actuals Measurement Section -->
+                <div class="bg-attic-darker/50 p-6 rounded-2xl border border-attic-neonBlue/20 shadow-inner">
+                    <h3 class="text-center text-xs font-bold text-attic-neonBlue uppercase tracking-[0.2em] mb-6">Actual
+                        Measurements vs Targets</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <!-- Superheat Actual -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs uppercase text-gray-400 font-bold">Suction Line Temp</label>
+                                <div id="actual-sh-result" class="text-xl font-bold text-white">Actual SH: <span
+                                        id="val-actual-sh" class="text-attic-neonYellow">--</span></div>
+                            </div>
+                            <input type="number" id="input-slt" placeholder="55" value="55"
+                                class="w-full bg-attic-panel border border-gray-700 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors shadow-lg">
+                            <div id="sh-delta" class="text-center text-xs font-mono py-1 rounded bg-black/30 hidden">--
+                            </div>
+                        </div>
+
+                        <!-- Subcool Actual -->
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs uppercase text-gray-400 font-bold">Liquid Line Temp</label>
+                                <div id="actual-sc-result" class="text-xl font-bold text-white">Actual SC: <span
+                                        id="val-actual-sc" class="text-attic-neonBlue">--</span></div>
+                            </div>
+                            <input type="number" id="input-llt" placeholder="90" value="90"
+                                class="w-full bg-attic-panel border border-gray-700 rounded-lg p-3 text-white focus:border-attic-neonYellow focus:outline-none transition-colors shadow-lg">
+                            <div id="sc-delta" class="text-center text-xs font-mono py-1 rounded bg-black/30 hidden">--
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -338,13 +404,26 @@
         const sections = ['pt-chart', 'error-codes', 'safety-tips'];
         const dashboard = document.getElementById('dashboard');
 
-        // PT Slider Elements
+        // Elements
         const sliderTrack = document.getElementById('slider-track');
         const sliderHandle = document.getElementById('slider-handle');
         const sliderFill = document.getElementById('slider-fill');
         const psiReadout = document.getElementById('psi-readout');
         const tempDisplay = document.getElementById('temp-display');
         const modeIndicator = document.getElementById('mode-indicator');
+
+        const inputIWB = document.getElementById('input-iwb');
+        const inputODB = document.getElementById('input-odb');
+        const inputTargetSC = document.getElementById('input-target-sc');
+        const inputSLT = document.getElementById('input-slt');
+        const inputLLT = document.getElementById('input-llt');
+
+        const targetSHDisplay = document.getElementById('target-sh-display');
+        const targetSCDisplay = document.getElementById('target-sc-display');
+        const valActualSH = document.getElementById('val-actual-sh');
+        const valActualSC = document.getElementById('val-actual-sc');
+        const shDelta = document.getElementById('sh-delta');
+        const scDelta = document.getElementById('sc-delta');
 
         // PT Data & Logic for R-410A
         const ptData = [
@@ -369,21 +448,79 @@
             return ptData[ptData.length - 1].p;
         }
 
-        // Slider State
-        let isDragging = false;
-        let startX, startY;
-        let startTemp = 40;
         let currentTemp = 40;
         const tempMin = 0;
         const tempMax = 140;
 
-        function updateSlider(percent, temp) {
-            const safePercent = Math.max(0, Math.min(100, percent));
-            sliderHandle.style.left = `${safePercent}%`;
-            sliderFill.style.width = `${safePercent}%`;
-            tempDisplay.innerText = `${temp.toFixed(1)}°F`;
-            psiReadout.innerText = calculatePressure(temp).toFixed(1);
+        function updateCalculations() {
+            // 1. Target Superheat: ((3 * WB) - 80 - DB) / 2
+            const iwb = parseFloat(inputIWB.value);
+            const odb = parseFloat(inputODB.value);
+            let targetSHValue = null;
+            if (!isNaN(iwb) && !isNaN(odb)) {
+                targetSHValue = Math.max(0, ((3 * iwb) - 80 - odb) / 2);
+                targetSHDisplay.innerText = targetSHValue.toFixed(1) + "°";
+            } else {
+                targetSHDisplay.innerText = "--";
+            }
+
+            // 2. Target Subcool
+            const targetSCValue = parseFloat(inputTargetSC.value);
+            if (!isNaN(targetSCValue)) {
+                targetSCDisplay.innerText = targetSCValue.toFixed(1) + "°";
+            } else {
+                targetSCDisplay.innerText = "--";
+            }
+
+            // 3. Actual Superheat: SLT - Saturation Temp
+            const slt = parseFloat(inputSLT.value);
+            if (!isNaN(slt)) {
+                const actualSH = (slt - currentTemp).toFixed(1);
+                valActualSH.innerText = actualSH + "°";
+
+                if (targetSHValue !== null) {
+                    const diff = (parseFloat(actualSH) - targetSHValue).toFixed(1);
+                    const sign = diff >= 0 ? "+" : "";
+                    shDelta.innerText = `Diff: ${sign}${diff}°`;
+                    shDelta.classList.remove('hidden');
+                    shDelta.style.color = Math.abs(diff) < 2 ? '#ffe600' : '#ff4d4d';
+                }
+            } else {
+                valActualSH.innerText = "--";
+                shDelta.classList.add('hidden');
+            }
+
+            // 4. Actual Subcool: Saturation Temp - LLT
+            const llt = parseFloat(inputLLT.value);
+            if (!isNaN(llt)) {
+                const actualSC = (currentTemp - llt).toFixed(1);
+                valActualSC.innerText = actualSC + "°";
+
+                if (!isNaN(targetSCValue)) {
+                    const diff = (parseFloat(actualSC) - targetSCValue).toFixed(1);
+                    const sign = diff >= 0 ? "+" : "";
+                    scDelta.innerText = `Diff: ${sign}${diff}°`;
+                    scDelta.classList.remove('hidden');
+                    scDelta.style.color = Math.abs(diff) < 2 ? '#00f3ff' : '#ff4d4d';
+                }
+            } else {
+                valActualSC.innerText = "--";
+                scDelta.classList.add('hidden');
+            }
         }
+
+        function updateSliderUI() {
+            const percent = ((currentTemp - tempMin) / (tempMax - tempMin)) * 100;
+            sliderHandle.style.left = `${percent}%`;
+            sliderFill.style.width = `${percent}%`;
+            tempDisplay.innerText = `${currentTemp.toFixed(1)}°F`;
+            psiReadout.innerText = calculatePressure(currentTemp).toFixed(1);
+            updateCalculations();
+        }
+
+        // Slider Interaction
+        let isDragging = false;
+        let startX, startY, sliderStartTemp;
 
         function handleStart(e) {
             isDragging = true;
@@ -391,7 +528,7 @@
             const clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
             startX = clientX;
             startY = clientY;
-            startTemp = currentTemp;
+            sliderStartTemp = currentTemp;
             e.preventDefault();
         }
 
@@ -403,16 +540,15 @@
             const deltaX = clientX - startX;
             const deltaY = startY - clientY;
             const trackWidth = sliderTrack.offsetWidth;
-
             const isFineTune = deltaY > 50;
 
             if (isFineTune) {
                 modeIndicator.innerText = "Mode: Fine-Tune (0.1° Step)";
-                modeIndicator.classList.remove('bg-gray-800', 'text-gray-400');
                 modeIndicator.classList.add('bg-attic-neonYellow/20', 'text-attic-neonYellow');
+                modeIndicator.classList.remove('bg-gray-800', 'text-gray-400');
 
                 const tempDelta = (deltaX / trackWidth) * 10;
-                currentTemp = Math.max(tempMin, Math.min(tempMax, startTemp + tempDelta));
+                currentTemp = Math.max(tempMin, Math.min(tempMax, sliderStartTemp + tempDelta));
                 currentTemp = Math.round(currentTemp * 10) / 10;
             } else {
                 modeIndicator.innerText = "Mode: Standard (5° Step)";
@@ -424,15 +560,11 @@
                 const rawTemp = tempMin + (pos / rect.width) * (tempMax - tempMin);
                 currentTemp = Math.round(rawTemp / 5) * 5;
             }
-
-            const percent = ((currentTemp - tempMin) / (tempMax - tempMin)) * 100;
-            updateSlider(percent, currentTemp);
+            updateSliderUI();
         }
 
         function handleEnd() {
             isDragging = false;
-            // Mode reset handled in handleMove when deltaY <= 50, 
-            // but final reset here ensures visual cleanup
             modeIndicator.innerText = "Mode: Standard (5° Step)";
             modeIndicator.classList.remove('bg-attic-neonYellow/20', 'text-attic-neonYellow');
             modeIndicator.classList.add('bg-gray-800', 'text-gray-400');
@@ -441,7 +573,6 @@
         sliderHandle.addEventListener('mousedown', handleStart);
         window.addEventListener('mousemove', handleMove);
         window.addEventListener('mouseup', handleEnd);
-
         sliderHandle.addEventListener('touchstart', handleStart, { passive: false });
         window.addEventListener('touchmove', handleMove, { passive: false });
         window.addEventListener('touchend', handleEnd);
@@ -452,29 +583,27 @@
             const pos = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
             currentTemp = tempMin + (pos / rect.width) * (tempMax - tempMin);
             currentTemp = Math.round(currentTemp / 5) * 5;
-            const percent = ((currentTemp - tempMin) / (tempMax - tempMin)) * 100;
-            updateSlider(percent, currentTemp);
+            updateSliderUI();
         });
 
-        // Initial update
-        updateSlider(28.5, 40);
+        // Input Listeners
+        [inputIWB, inputODB, inputTargetSC, inputSLT, inputLLT].forEach(input => {
+            input.addEventListener('input', updateCalculations);
+        });
 
+        // Initialize
+        updateSliderUI();
+
+        // Nav
         function showSection(sectionId) {
             dashboard.classList.add('hidden');
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                el.classList.add('hidden');
-            });
-            const section = document.getElementById(sectionId);
-            section.classList.remove('hidden');
+            sections.forEach(id => document.getElementById(id).classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
             window.scrollTo(0, 0);
         }
 
         function showDashboard() {
-            sections.forEach(id => {
-                const el = document.getElementById(id);
-                el.classList.add('hidden');
-            });
+            sections.forEach(id => document.getElementById(id).classList.add('hidden'));
             dashboard.classList.remove('hidden');
         }
 
