@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HVAC Tech's Pocket Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        attic: {
+                            dark: '#1a1a1a',
+                            darker: '#121212',
+                            panel: '#252525',
+                            neonBlue: '#00f3ff',
+                            neonYellow: '#ffe600',
+                            text: '#e0e0e0'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        body {
+            background-color: #1a1a1a; /* Fallback */
+        }
+        
+        /* Custom scrollbar for a "tech" feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff; 
+        }
+    </style>
+</head>
+<body class="bg-attic-dark text-attic-text font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-attic-darker border-b border-attic-neonBlue/30 p-4 sticky top-0 z-50 shadow-lg shadow-attic-neonBlue/5">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-xl md:text-2xl font-bold text-attic-neonBlue tracking-wider uppercase">
+                HVAC <span class="text-white">Pocket Guide</span>
+            </h1>
+            <div class="w-3 h-3 rounded-full bg-attic-neonYellow animate-pulse shadow-[0_0_10px_#ffe600]"></div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto p-4 md:p-6 lg:p-8">
+        
+        <!-- Navigation Buttons -->
+        <div id="dashboard" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <!-- PT Chart Button -->
+            <button onclick="showSection('pt-chart')" class="group relative overflow-hidden bg-attic-panel p-8 rounded-xl border border-gray-700 hover:border-attic-neonBlue transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(0,243,255,0.15)] text-left">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-attic-neonBlue" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2 group-hover:text-attic-neonBlue transition-colors">PT Chart</h2>
+                <p class="text-gray-400 text-sm">Pressure & Temperature relationships for common refrigerants.</p>
+                <div class="mt-4 w-12 h-1 bg-attic-neonBlue rounded-full group-hover:w-full transition-all duration-500"></div>
+            </button>
+
+            <!-- Error Codes Button -->
+            <button onclick="showSection('error-codes')" class="group relative overflow-hidden bg-attic-panel p-8 rounded-xl border border-gray-700 hover:border-attic-neonYellow transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(255,230,0,0.15)] text-left">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-attic-neonYellow" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2 group-hover:text-attic-neonYellow transition-colors">Common Errors</h2>
+                <p class="text-gray-400 text-sm">Quick lookup for LED flash codes and system faults.</p>
+                <div class="mt-4 w-12 h-1 bg-attic-neonYellow rounded-full group-hover:w-full transition-all duration-500"></div>
+            </button>
+
+            <!-- Safety Tips Button -->
+            <button onclick="showSection('safety-tips')" class="group relative overflow-hidden bg-attic-panel p-8 rounded-xl border border-gray-700 hover:border-red-500 transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(239,68,68,0.15)] text-left">
+                <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <h2 class="text-2xl font-bold text-white mb-2 group-hover:text-red-500 transition-colors">Safety Tips</h2>
+                <p class="text-gray-400 text-sm">Critical reminders, lockout/tagout, and PPE checklist.</p>
+                <div class="mt-4 w-12 h-1 bg-red-500 rounded-full group-hover:w-full transition-all duration-500"></div>
+            </button>
+        </div>
+
+        <!-- Section: PT Chart -->
+        <section id="pt-chart" class="hidden animate-fade-in-up">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-attic-neonBlue">PT Chart <span class="text-gray-500 text-lg ml-2">(R-410A & R-22)</span></h2>
+                <button onclick="showDashboard()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors border border-gray-600">
+                    &larr; Back
+                </button>
+            </div>
+            
+            <div class="bg-attic-panel rounded-xl border border-gray-700 overflow-hidden shadow-xl">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-attic-darker text-gray-400 text-sm uppercase tracking-wider">
+                                <th class="p-4 border-b border-gray-700">Temp (°F)</th>
+                                <th class="p-4 border-b border-gray-700 text-attic-neonBlue">R-410A (PSI)</th>
+                                <th class="p-4 border-b border-gray-700 text-green-400">R-22 (PSI)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700 text-gray-200">
+                            <!-- Sample data points -->
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">30°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">97.5</td>
+                                <td class="p-4 font-mono text-green-400">54.9</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">35°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">107.5</td>
+                                <td class="p-4 font-mono text-green-400">61.5</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">40°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">118.0</td>
+                                <td class="p-4 font-mono text-green-400">68.5</td>
+                            </tr>
+                            <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">45°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">130.0</td>
+                                <td class="p-4 font-mono text-green-400">76.0</td>
+                            </tr>
+                             <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">50°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">142.0</td>
+                                <td class="p-4 font-mono text-green-400">84.0</td>
+                            </tr>
+                             <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">100°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">317.0</td>
+                                <td class="p-4 font-mono text-green-400">196.0</td>
+                            </tr>
+                             <tr class="hover:bg-white/5 transition-colors">
+                                <td class="p-4 font-bold">110°F</td>
+                                <td class="p-4 font-mono text-attic-neonBlue">365.0</td>
+                                <td class="p-4 font-mono text-green-400">226.0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-4 bg-attic-darker text-gray-500 text-xs text-center border-t border-gray-700">
+                    * Values are approximate saturation pressures.
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Error Codes -->
+        <section id="error-codes" class="hidden animate-fade-in-up">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-attic-neonYellow">Common Error Codes</h2>
+                <button onclick="showDashboard()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors border border-gray-600">
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="space-y-4">
+                <!-- Error Item -->
+                <div class="bg-attic-panel p-5 rounded-xl border border-gray-700 hover:border-attic-neonYellow transition-colors flex items-start gap-4">
+                    <div class="bg-attic-neonYellow/10 text-attic-neonYellow p-3 rounded-lg shrink-0">
+                        <span class="font-bold text-xl">01</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Ignition Failure</h3>
+                        <p class="text-gray-400 mt-1">System failed to detect flame. Check: Gas supply, flame sensor (clean/replace), igniter resistance.</p>
+                    </div>
+                </div>
+
+                 <!-- Error Item -->
+                <div class="bg-attic-panel p-5 rounded-xl border border-gray-700 hover:border-attic-neonYellow transition-colors flex items-start gap-4">
+                     <div class="bg-attic-neonYellow/10 text-attic-neonYellow p-3 rounded-lg shrink-0">
+                        <span class="font-bold text-xl">02</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Pressure Switch Open</h3>
+                        <p class="text-gray-400 mt-1">Draft inducer problem. Check: Blocked flue, inducer motor amp draw, cracked hose to pressure switch.</p>
+                    </div>
+                </div>
+
+                 <!-- Error Item -->
+                <div class="bg-attic-panel p-5 rounded-xl border border-gray-700 hover:border-attic-neonYellow transition-colors flex items-start gap-4">
+                     <div class="bg-attic-neonYellow/10 text-attic-neonYellow p-3 rounded-lg shrink-0">
+                        <span class="font-bold text-xl">03</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Limit Switch Open</h3>
+                        <p class="text-gray-400 mt-1">System overheating. Check: Dirty filter, blocked returns, blower motor capacitor/failure.</p>
+                    </div>
+                </div>
+
+                 <!-- Error Item -->
+                <div class="bg-attic-panel p-5 rounded-xl border border-gray-700 hover:border-attic-neonYellow transition-colors flex items-start gap-4">
+                     <div class="bg-attic-neonYellow/10 text-attic-neonYellow p-3 rounded-lg shrink-0">
+                        <span class="font-bold text-xl">04</span>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-white text-lg">Rollout Switch Open</h3>
+                        <p class="text-gray-400 mt-1">Flame rollout detected. <span class="text-red-400 font-bold uppercase">Critical Safety Issue.</span> Check: Heat exchanger for cracks, proper draft.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Safety Tips -->
+        <section id="safety-tips" class="hidden animate-fade-in-up">
+             <div class="flex justify-between items-center mb-6">
+                <h2 class="text-3xl font-bold text-red-500">Safety Tips</h2>
+                <button onclick="showDashboard()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-white rounded-lg transition-colors border border-gray-600">
+                    &larr; Back
+                </button>
+            </div>
+
+            <div class="bg-attic-panel rounded-xl border border-gray-700 p-6 md:p-8">
+                <ul class="space-y-6">
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1 bg-red-500/20 p-2 rounded-full text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">LOTO (Lockout / Tagout)</h3>
+                            <p class="text-gray-400 mt-1">ALWAYS disconnect power and lock the disconnect before servicing any moving parts or electrical connections. Verify dead with a meter.</p>
+                        </div>
+                    </li>
+
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1 bg-red-500/20 p-2 rounded-full text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">Capacitor Safety</h3>
+                            <p class="text-gray-400 mt-1">Capacitors hold a charge even after power is off. Short the terminals with a screwdriver (using the insulated handle) before touching.</p>
+                        </div>
+                    </li>
+
+                    <li class="flex items-start gap-4">
+                        <div class="mt-1 bg-red-500/20 p-2 rounded-full text-red-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white">PPE Checklist</h3>
+                            <p class="text-gray-400 mt-1">Gloves for sheet metal. Safety glasses for refrigerant/brazing. Non-slip shoes for attics/ladders.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="text-center p-6 text-gray-600 text-xs text-attic-darker font-mono">
+        <div class="text-gray-500">VERSION 1.0 // HVAC TECH COMPANION</div>
+    </footer>
+
+    <script>
+        const sections = ['pt-chart', 'error-codes', 'safety-tips'];
+        const dashboard = document.getElementById('dashboard');
+
+        function showSection(sectionId) {
+            // Hide dashboard
+            dashboard.classList.add('hidden');
+            
+            // Hide all sections first
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('hidden');
+            });
+            
+            // Show requested section
+            const section = document.getElementById(sectionId);
+            section.classList.remove('hidden');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        function showDashboard() {
+             // Hide all sections
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                el.classList.add('hidden');
+            });
+            
+            // Show dashboard
+            dashboard.classList.remove('hidden');
+        }
+
+        // Add custom animation styles via JS to avoid extra CSS file if not needed
+        tailwind.config.theme.extend.keyframes = {
+            'fade-in-up': {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+            }
+        }
+        tailwind.config.theme.extend.animation = {
+            'fade-in-up': 'fade-in-up 0.3s ease-out',
+        }
+    </script>
+</body>
+</html>
